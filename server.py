@@ -39,7 +39,8 @@ class MyWebServer(SocketServer.BaseRequestHandler):
 	STATUS_FORMAT = "HTTP/1.1 {} {} \r\n"
 	GENERAL_HEADER_FORMAT = "Date: {} \r\nConnection: close \r\n"
 	RESPONSE_HEADER_FORMAT = "Accept-Ranges: bytes \r\nServer: python \r\n"
-	ENTITY_HEADER_FORMAT = "Content-Type: {} \r\nContent-Length: {} \r\n\r\n"
+	ENTITY_HEADER_FORMAT = "Content-Type: {} \r\nContent-Length: {} \r\n"
+	CRLF = "\r\n"
 	OK_RESPONSE = "200"
 	SERVER_MAIN_PATH = os.path.realpath(os.curdir) + "/www"
 
@@ -73,7 +74,10 @@ class MyWebServer(SocketServer.BaseRequestHandler):
 			content_type = mimetypes.guess_type(path)[0]
 			with open(path) as req_file:
 				file_data += req_file.read()
-			response_str += self.ENTITY_HEADER_FORMAT.format(content_type, len(file_data)) + file_data
+			response_str += self.ENTITY_HEADER_FORMAT.format(content_type, len(file_data)) + self.CRLF + file_data
+		else:
+			response_str += self.CRLF
+
 
 		return response_str
 
