@@ -89,6 +89,8 @@ class MyWebServer(SocketServer.BaseRequestHandler):
 		if (os.path.exists(request_path) == False):
 			return self.construct_response()
 		if (os.path.isdir(request_path)):
+			if (request_path[-1] != '/'):
+				request_path += '/'
 			request_path += "index.html"
 
 		return self.construct_response(self.OK_RESPONSE, request_path)
